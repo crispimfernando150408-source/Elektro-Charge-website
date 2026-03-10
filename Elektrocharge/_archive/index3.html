@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elektro Charge - O futuro da mobilidade elétrica</title>
+
+    <!-- Google Fonts based on New Design System -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Iconify for icons -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+    <!-- Tailwind CSS with Eletroposto configuration -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        eletro: {
+                            green: {
+                                50: '#f0fdf4',
+                                100: '#dcfce7',
+                                200: '#bbf7d0',
+                                300: '#86efac',
+                                400: '#4ade80',
+                                500: '#22c55e',
+                                600: '#16a34a',
+                                700: '#15803d',
+                                800: '#166534',
+                                900: '#14532d',
+                            },
+                            neutral: {
+                                900: '#0F0F0F',
+                                800: '#1C1C1C',
+                                100: '#F5F5F0',
+                                50: '#FFFFFF',
+                            }
+                        }
+                    },
+                    animation: {
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        shimmer: {
+                            from: { transform: 'translateX(-100%) skewX(-15deg)' },
+                            to: { transform: 'translateX(200%) skewX(-15deg)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #F5F5F0;
+            --text-main: #1C1C1C;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Video Scroll Environment */
+        .hero-section {
+            /* Using a large height to allow GSAP ScrollTrigger to scrub smoothly */
+            height: 350vh;
+            position: relative;
+        }
+
+        .sticky-container {
+            /* Keeps layout fixed while scrolling down */
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Split Screen / Negative Space Layout Setup */
+        .video-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 55%;
+            height: 100%;
+            z-index: 1;
+            /* Smooth gradient mask merging video with background */
+            -webkit-mask-image: linear-gradient(to right, transparent, black 20%);
+            mask-image: linear-gradient(to right, transparent, black 20%);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Enhance presentation */
+            filter: contrast(1.05) brightness(0.95);
+        }
+
+        /* Mobile Adjustments for layout logic */
+        @media (max-width: 1024px) {
+            .video-container {
+                width: 100%;
+                height: 55vh;
+                top: 0;
+                -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+                mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+            }
+
+            .video-container video {
+                object-position: center bottom;
+            }
+
+            .content-layer {
+                align-items: flex-end;
+            }
+        }
+
+        /* Interaction Layer */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+            pointer-events: none;
+            /* Allows pointer pass-through */
+        }
+
+        .content-layer * {
+            pointer-events: auto;
+        }
+
+        /* Text Reveals (from Design System) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(2rem);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .text-reveal-wrapper {
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: bottom;
+        }
+
+        .text-reveal-content {
+            transform: translateY(110%);
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease;
+            display: block;
+        }
+
+        .active .text-reveal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .gradient-text-green {
+            background: linear-gradient(135deg, #16a34a 0%, #4ade80 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Button Beam Interaction (from Design System) */
+        .btn-beam-primary {
+            position: relative;
+            overflow: hidden;
+            background: #22c55e;
+            color: #FFFFFF;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+        }
+
+        .btn-beam-primary:hover {
+            transform: translateY(-2px);
+            background: #16a34a;
+            box-shadow: 0 10px 25px -5px rgba(34, 197, 94, 0.6);
+        }
+
+        .btn-beam-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: translateX(-100%) skewX(-15deg);
+            transition: transform 0.5s;
+        }
+
+        .btn-beam-primary:hover::before {
+            transform: translateX(100%) skewX(-15deg);
+            transition: transform 0.5s;
+        }
+
+        /* Aesthetics Grids & Noise */
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Sequence Delays */
+        .delay-100 {
+            transition-delay: 0.1s;
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            transition-delay: 0.2s;
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            transition-delay: 0.3s;
+            animation-delay: 0.3s;
+        }
+
+        .delay-400 {
+            transition-delay: 0.4s;
+            animation-delay: 0.4s;
+        }
+
+        .delay-500 {
+            transition-delay: 0.5s;
+            animation-delay: 0.5s;
+        }
+    </style>
+</head>
+
+<body class="bg-grid antialiased">
+    <div class="noise"></div>
+
+    <!-- Minimalist Navbar -->
+    <header
+        class="fixed top-0 w-full z-50 border-b border-stone-200/50 bg-[#F5F5F0]/80 backdrop-blur-md transition-transform duration-500">
+        <div class="max-w-[1440px] mx-auto flex justify-between items-center px-6 md:px-12 py-5 lg:px-24">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 bg-eletro-neutral-900 border border-eletro-green-500 text-eletro-green-500 flex items-center justify-center rounded-lg shadow-lg">
+                    <iconify-icon icon="solar:bolt-bold-duotone" class="text-2xl"></iconify-icon>
+                </div>
+                <span class="font-display font-bold tracking-tight text-xl leading-none block text-eletro-neutral-900">
+                    ELEKTRO<span class="text-eletro-green-600">.CHARGE</span>
+                </span>
+            </div>
+
+            <nav
+                class="hidden lg:flex items-center gap-8 text-[11px] font-mono uppercase tracking-widest text-stone-600">
+                <a href="#" class="hover:text-eletro-green-600 transition-colors">Infraestrutura</a>
+                <a href="#" class="hover:text-eletro-green-600 transition-colors">Tecnologia</a>
+                <a href="#" class="hover:text-eletro-green-600 transition-colors">Sobre</a>
+            </nav>
+
+            <button
+                class="px-6 py-2.5 border border-stone-300 text-eletro-neutral-900 bg-white rounded-lg text-[10px] font-mono uppercase tracking-widest font-bold hover:border-eletro-green-500 hover:text-eletro-green-600 transition-all shadow-sm">
+                Acessar Portal
+            </button>
+        </div>
+    </header>
+
+    <!-- Scrollable Video & Content Experience -->
+    <main class="hero-section" id="hero-trigger">
+        <div class="sticky-container">
+
+            <!-- Video Area (Acting as focal point on right/background) -->
+            <div class="video-container" id="video-wrapper">
+                <!-- Fallback to mp4 format with the specific name user requested -->
+                <video id="hero-video" autoplay loop muted playsinline preload="auto">
+                    <source src="video.mp4" type="video/mp4" />
+                    Seu navegador não suporta a visualização deste vídeo.
+                </video>
+            </div>
+
+            <!-- Main Content Area ensuring large negative space -->
+            <div
+                class="content-layer px-6 md:px-12 lg:px-24 flex flex-col justify-end lg:justify-center h-full pb-16 lg:pb-0 pt-48 lg:pt-0">
+
+                <div class="hero-content space-y-8 lg:max-w-xl xl:max-w-2xl relative z-20">
+
+                    <!-- Meta Tag -->
+                    <div
+                        class="inline-flex items-center gap-2 reveal delay-100 bg-white/60 backdrop-blur-sm px-3 py-1.5 rounded-full border border-stone-200 shadow-sm">
+                        <span
+                            class="w-2 h-2 bg-eletro-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.6)]"></span>
+                        <span
+                            class="text-[10px] font-mono uppercase tracking-widest text-eletro-green-700 font-bold">Inovação
+                            em Mobilidade</span>
+                    </div>
+
+                    <!-- Titles -->
+                    <h1
+                        class="font-display font-bold tracking-tighter leading-[0.95] text-eletro-neutral-900 text-5xl md:text-7xl lg:text-[5rem]">
+                        <span class="text-reveal-wrapper"><span class="text-reveal-content">O futuro
+                                da</span></span><br />
+                        <span class="text-reveal-wrapper"><span
+                                class="text-reveal-content delay-100 text-transparent gradient-text-green pb-1">mobilidade
+                                elétrica.</span></span>
+                    </h1>
+
+                    <!-- Subtitle -->
+                    <h2
+                        class="text-xl md:text-2xl font-display font-medium text-stone-700 reveal delay-200 max-w-lg text-balance">
+                        Infraestrutura inteligente para veículos elétricos.
+                    </h2>
+
+                    <!-- Text description -->
+                    <p
+                        class="text-base lg:text-lg text-stone-600 leading-relaxed font-sans font-medium reveal delay-300 max-w-md">
+                        A Elektro Charge conecta cidades à nova geração de mobilidade elétrica com eletropostos rápidos,
+                        eficientes e preparados para o crescimento do mercado.
+                    </p>
+
+                    <!-- Calls to Action -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-6 reveal delay-400">
+                        <button
+                            class="btn-beam-primary px-8 py-4 rounded-lg font-mono text-[11px] uppercase tracking-widest font-bold flex items-center justify-center gap-3">
+                            Conhecer o eletroposto
+                            <iconify-icon icon="solar:round-arrow-right-bold" class="text-lg"></iconify-icon>
+                        </button>
+
+                        <button
+                            class="px-8 py-4 border-2 border-stone-200 text-stone-700 bg-white/50 backdrop-blur-sm rounded-lg font-mono text-[11px] uppercase tracking-widest font-bold hover:border-eletro-green-500 hover:text-eletro-green-600 hover:bg-white transition-all flex items-center justify-center gap-3 group">
+                            <iconify-icon icon="solar:play-circle-bold"
+                                class="text-lg text-stone-400 group-hover:text-eletro-green-500 transition-colors"></iconify-icon>
+                            Ver como funciona
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Scroll Down Indicator -->
+                <div
+                    class="absolute bottom-12 left-6 md:left-12 lg:left-24 reveal delay-500 flex flex-col items-center gap-4 scroll-indicator">
+                    <span
+                        class="text-[9px] font-mono tracking-widest font-bold text-stone-500 uppercase -rotate-90 origin-center mb-6"
+                        style="letter-spacing: 0.3em;">
+                        Scroll
+                    </span>
+                    <div class="w-[1px] h-12 bg-stone-300 relative overflow-hidden">
+                        <div
+                            class="absolute top-0 left-0 w-full h-1/2 bg-eletro-green-500 animate-[shimmer_1.5s_linear_infinite] opacity-80">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Subsequent Section Placeholder -->
+    <section
+        class="min-h-screen bg-eletro-neutral-900 flex flex-col items-center justify-center relative z-20 overflow-hidden">
+        <div class="absolute inset-0 opacity-10"
+            style="background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px); background-size: 40px 40px;">
+        </div>
+
+        <h2 class="font-display text-4xl md:text-5xl font-bold mb-4 text-white relative z-10">Eficiência em Cada Detalhe
+        </h2>
+        <p class="font-mono text-xs uppercase tracking-widest text-eletro-green-400 font-bold relative z-10">A solução
+            continua aqui</p>
+    </section>
+
+    <!-- GSAP Core & ScrollTrigger (via CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        // 1. Register ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // 2. Trigger Initial Entry Animations
+            setTimeout(() => {
+                document.querySelectorAll('.reveal').forEach(el => el.classList.add('active'));
+                document.querySelectorAll('.hero-content').forEach(el => el.classList.add('active'));
+            }, 100);
+
+
+            // 3. Scroll Controlled Video logic
+            const video = document.getElementById('hero-video');
+
+            // Allow checking if there's a fallback needed for the source
+            // If the user's video exists, it continues normally.
+
+            function initScrollAnimations() {
+                // Determine target duration
+                const duration = video.duration || 10;
+
+                // Timeline linked to the full .hero-section scroll area
+                let tl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "#hero-trigger",
+                        start: "top top",
+                        end: "bottom bottom",
+                        scrub: 0.5, // Smoothed scrubbing for premium feel
+                    }
+                });
+
+                // Scrub the video based on scroll
+                tl.to(video, {
+                    currentTime: duration,
+                    ease: "none"
+                }, 0);
+
+                // Add parallax light effect to the video's container
+                tl.to("#hero-video", {
+                    scale: 1.1,
+                    y: "3%",
+                    ease: "power1.inOut"
+                }, 0);
+
+                // Fade out and translate text slightly to mimic depth
+                tl.to(".hero-content", {
+                    y: -60,
+                    opacity: 0,
+                    ease: "power2.in"
+                }, 0);
+
+                // Fade out scroll indicator quickly right at start
+                tl.to(".scroll-indicator", {
+                    opacity: 0,
+                    y: -20,
+                    duration: 0.05,
+                    ease: "power1.in"
+                }, 0);
+            }
+
+            // Bind metadata loading to ensure we scrub the correct timeframe
+            if (video.readyState >= 1) {
+                initScrollAnimations();
+            } else {
+                video.addEventListener('loadedmetadata', initScrollAnimations);
+                // Fail-safe if metadata takes too long or fails to load
+                setTimeout(() => {
+                    if (!ScrollTrigger.getAll().length) initScrollAnimations();
+                }, 2000);
+            }
+
+            // Workaround for Safari/iOS suspended video issues
+            // By playing and instantly pausing, we cache the first frame
+            video.play().then(() => {
+                video.pause();
+                video.currentTime = 0;
+            }).catch(e => {
+                // Ignore autoplay policy errors
+                console.log("Preload play failed, natural scroll will still attempt to scrub.");
+            });
+        });
+    </script>
+</body>
+
+</html>
