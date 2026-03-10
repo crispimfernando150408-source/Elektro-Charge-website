@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elektro Charge - O futuro da mobilidade elétrica</title>
+
+    <!-- Google Fonts based on New Design System -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Iconify for icons (optional) -->
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+    <!-- Tailwind CSS with Eletroposto configuration -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        eletro: {
+                            green: {
+                                50: '#f0fdf4',
+                                100: '#dcfce7',
+                                200: '#bbf7d0',
+                                300: '#86efac',
+                                400: '#4ade80',
+                                500: '#22c55e',
+                                600: '#16a34a',
+                                700: '#15803d',
+                                800: '#166534',
+                                900: '#14532d',
+                            },
+                            neutral: {
+                                900: '#0F0F0F',
+                                800: '#1C1C1C',
+                                100: '#F5F5F0',
+                                50: '#FFFFFF',
+                            }
+                        }
+                    },
+                    animation: {
+                        'shimmer': 'shimmer 2s linear infinite',
+                    },
+                    keyframes: {
+                        shimmer: {
+                            from: { transform: 'translateX(-100%) skewX(-15deg)' },
+                            to: { transform: 'translateX(200%) skewX(-15deg)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-main: #F5F5F0;
+            --text-main: #1C1C1C;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        /* Video Scroll Environment */
+        .hero-section {
+            /* long height for scrub scroll */
+            height: 350vh;
+            position: relative;
+        }
+
+        .sticky-container {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .video-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 55%;
+            height: 100%;
+            z-index: 1;
+            -webkit-mask-image: linear-gradient(to right, transparent, black 20%);
+            mask-image: linear-gradient(to right, transparent, black 20%);
+        }
+
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.05) brightness(0.95);
+        }
+
+        @media (max-width: 1024px) {
+            .video-container {
+                width: 100%;
+                height: 55vh;
+                top: 0;
+                -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+                mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+            }
+
+            .video-container video {
+                object-position: center bottom;
+            }
+
+            .content-layer {
+                align-items: flex-end;
+            }
+        }
+
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 1440px;
+            margin: 0 auto;
+            pointer-events: none;
+        }
+
+        .content-layer * {
+            pointer-events: auto;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(2rem);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .text-reveal-wrapper {
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: bottom;
+        }
+
+        .text-reveal-content {
+            transform: translateY(110%);
+            opacity: 0;
+            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 1.2s ease;
+            display: block;
+        }
+
+        .active .text-reveal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .gradient-text-green {
+            background: linear-gradient(135deg, #16a34a 0%, #4ade80 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .btn-beam-primary {
+            position: relative;
+            overflow: hidden;
+            background: #22c55e;
+            color: #FFFFFF;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s ease;
+        }
+
+        .btn-beam-primary:hover {
+            transform: translateY(-2px);
+            background: #16a34a;
+            box-shadow: 0 10px 25px -5px rgba(34, 197, 94, 0.6);
+        }
+
+        .btn-beam-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+            transform: translateX(-100%) skewX(-15deg);
+            transition: transform 0.5s;
+        }
+
+        .btn-beam-primary:hover::before {
+            transform: translateX(100%) skewX(-15deg);
+            transition: transform 0.5s;
+        }
+
+        .bg-grid {
+            background-size: 40px 40px;
+            background-image:
+                linear-gradient(to right, rgba(0, 0, 0, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+        }
+
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .delay-100 {
+            transition-delay: 0.1s;
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            transition-delay: 0.2s;
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            transition-delay: 0.3s;
+            animation-delay: 0.3s;
+        }
+
+        .delay-400 {
+            transition-delay: 0.4s;
+            animation-delay: 0.4s;
+        }
+
+        .delay-500 {
+            transition-delay: 0.5s;
+            animation-delay: 0.5s;
+        }
+    </style>
+</head>
+
+<body class="bg-grid antialiased">
+    <div class="noise"></div>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <div class="sticky-container">
+            <div class="video-container">
+                <video id="hero-video" src="@eletropostovideo.mp4" muted playsinline></video>
+            </div>
+
+            <div class="content-layer flex flex-col justify-center h-full px-6 lg:px-24">
+                <h1 class="text-5xl lg:text-7xl font-display font-bold mb-4 reveal">O futuro da mobilidade elétrica.</h1>
+                <p class="text-xl lg:text-2xl mb-6 reveal delay-100">Infraestrutura inteligente para veículos elétricos.</p>
+                <p class="max-w-prose text-base lg:text-lg mb-8 reveal delay-200">A Elektro Charge conecta cidades à nova geração de mobilidade elétrica com eletropostos rápidos, eficientes e preparados para o crescimento do mercado.</p>
+                <div class="flex gap-4 reveal delay-300">
+                    <a href="#" class="btn-beam-primary px-8 py-3 rounded-lg font-bold text-sm">Conhecer o eletroposto</a>
+                    <a href="#" class="px-8 py-3 border border-stone-300 rounded-lg text-sm hover:border-eletro-green-500">Ver como funciona</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GSAP + ScrollTrigger (CDN) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.0/ScrollTrigger.min.js"></script>
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        const video = document.getElementById('hero-video');
+        let videoDuration = 0;
+
+        function initVideoScroll() {
+            // parallax subtle movement
+            gsap.to('.video-container', {
+                y: '-10%',
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero-section',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+
+            // scrub playhead
+            gsap.to(video, {
+                currentTime: videoDuration,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: '.hero-section',
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: 0.5
+                }
+            });
+
+            // reveal text as it enters
+            document.querySelectorAll('.reveal').forEach(el => {
+                ScrollTrigger.create({
+                    trigger: el,
+                    start: 'top 80%',
+                    onEnter: () => el.classList.add('active')
+                });
+            });
+        }
+
+        video.addEventListener('loadedmetadata', () => {
+            videoDuration = video.duration;
+            video.pause(); // ensure it doesn't play automatically
+            video.currentTime = 0;
+            initVideoScroll();
+        });
+
+        // in case metadata already loaded (caching)
+        if (video.readyState >= 1) {
+            videoDuration = video.duration;
+            video.pause();
+            initVideoScroll();
+        }
+    </script>
+</body>
+
+</html>
